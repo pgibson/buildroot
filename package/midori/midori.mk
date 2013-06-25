@@ -4,9 +4,9 @@
 #
 ################################################################################
 
-MIDORI_VERSION = 0.4.6
+MIDORI_VERSION = 0.5.2
 MIDORI_SOURCE = midori-$(MIDORI_VERSION).tar.bz2
-MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.4/
+MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.5/
 MIDORI_LICENSE = LGPLv2.1+
 MIDORI_LICENSE_FILES = COPYING
 MIDORI_DEPENDENCIES = \
@@ -32,6 +32,7 @@ define MIDORI_CONFIGURE_CMDS
 		./waf configure			\
 		--prefix=/usr			\
 		--disable-libnotify		\
+                --disable-zeitgeist             \
        )
 endef
 
