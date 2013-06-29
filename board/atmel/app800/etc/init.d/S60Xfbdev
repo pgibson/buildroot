@@ -1,0 +1,58 @@
+#!/bin/sh
+# start the X server at boot
+
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+export HOME=/root
+export TSLIB_TSDEVICE=`cat /etc/ts.dev 2>/dev/null`
+if [ "${TSLIB_TSDEVICE}" ]; then
+  MOUSE=tslib
+else
+  MOUSE=evdev,,device=/dev/input/event0
+fi
+
+KEYBOARD=keyboard
+# evdev driver.  See xkb files in /usr/share/X11/xkb
+#KEYBOARD=evdev,,device=/dev/input/event0,xkbrules=xorg,xkbmodel=pc105,xkblayout=us
+
+# Example additional options
+#ADDITIONAL_OPTIONS=-rgba bgr
+#ADDITIONAL_OPTIONS=-screen 420x272x16
+
+# bump LCD backlight here for now
+echo "0" > /sys/devices/platform/atmel_lcdfb.0/backlight/backlight/brightness
+
+case "$1" in
+  start)
+    echo -n "Starting Xfbdev server: "
+    xinit /usr/lib/X11/xinit/xinitrc -- \
+      /usr/bin/Xfbdev -br -pn -mouse ${MOUSE} \
+        -keybd ${KEYBOARD} -dpi 75 \
+        $ADDITIONAL_OPTIONS -noreset \
+         > /tmp/`basename $0`.log 2>&1 &
+	if [ $? -ne 0 ]; then
+		echo "[FAIL]"
+	else
+		echo "[OK]"
+	fi
+    echo
+  ;;
+  stop)
+    echo -n "Stopping Xfbdev server: "
+    if [ -n "$(pidof xinit)" ]; then
+      if ! kill $(pidof xinit); then
+		echo "[FAIL]"
+      else
+		echo "[OK]"
+      fi
+    fi
+  ;;
+  restart)
+	$0 stop
+	sleep 1
+	$0 start
+  ;;
+  *)
+    echo "$0 [start|stop|restart]"
+  ;;
+esac
+
