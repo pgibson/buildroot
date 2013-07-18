@@ -21,7 +21,7 @@ KEYBOARD=keyboard
 #ADDITIONAL_OPTIONS=-screen 420x272x16
 
 # bump LCD backlight here for now
-echo "0" > /sys/devices/platform/atmel_lcdfb.0/backlight/backlight/brightness
+echo 0 > /sys/devices/platform/atmel_lcdfb.0/backlight/backlight/brightness
 
 case "$1" in
   start)
