@@ -5,10 +5,12 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 export HOME=/root
 export TSLIB_TSDEVICE=`cat /etc/ts.dev 2>/dev/null`
 if [ "${TSLIB_TSDEVICE}" ]; then
-  MOUSE=tslib
+  MOUSE=tslib,,device=/dev/input/touchscreen0
 else
   MOUSE=evdev,,device=/dev/input/event0
 fi
+
+export TSLIB_CALIBFILE="/etc/pointercal"
 
 KEYBOARD=keyboard
 # evdev driver.  See xkb files in /usr/share/X11/xkb
@@ -23,6 +25,11 @@ echo "0" > /sys/devices/platform/atmel_lcdfb.0/backlight/backlight/brightness
 
 case "$1" in
   start)
+    if [ ! -f $TSLIB_CALIBFILE ]; then                                             
+        echo Touchscreen calibration not found, running calibration                
+        ts_calibrate                                                               
+    fi
+
     echo -n "Starting Xfbdev server: "
     xinit /usr/lib/X11/xinit/xinitrc -- \
       /usr/bin/Xfbdev -br -pn -mouse ${MOUSE} \
