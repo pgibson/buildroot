@@ -36,7 +36,9 @@ HOST_GETTEXT_CONF_OPT = \
 	--disable-native-java \
 	--disable-csharp \
 	--disable-relocatable \
-	--without-emacs
+	--without-emacs \
+	--without-xz \
+	--disable-tools
 
 # Force build with NLS support, otherwise libintl is not built
 # This is needed because some packages (eg. libglib2) requires

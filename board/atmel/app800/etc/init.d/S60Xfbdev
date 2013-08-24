@@ -30,6 +30,8 @@ case "$1" in
         ts_calibrate                                                               
     fi
 
+    sleep 2
+
     echo -n "Starting Xfbdev server: "
     xinit /usr/lib/X11/xinit/xinitrc -- \
       /usr/bin/Xfbdev -br -pn -3button -rawcoord -nocursor -mouse ${MOUSE} \

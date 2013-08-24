@@ -23,7 +23,11 @@ else
 LIBXSLT_CONF_OPT += --without-crypto
 endif
 
-HOST_LIBXSLT_CONF_OPT = --without-debug --without-python --without-crypto
+HOST_LIBXSLT_CONF_OPT = --without-debug --without-python --without-crypto --disable-shared
+HOST_LIBXSLT_GEN_INTROSPECT = \
+	rm $(HOST_DIR)/usr/bin/xsltproc
+
+HOST_LIBXSLT_POST_INSTALL_HOOKS += HOST_LIBXSLT_GEN_INTROSPECT
 
 HOST_LIBXSLT_DEPENDENCIES = host-libxml2
 
